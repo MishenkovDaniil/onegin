@@ -13,43 +13,6 @@ char *my_fgets (char *str, int maxch, FILE *file);
 char *my_strdup (const char *src);
 int my_getline (char *line, int max, FILE *file);
 
-int main ()
-{
-    /*
-    printf ("%d\n", my_strlen ("bubu"));
-    char str1[5] = "foo";
-    char str2[5] = "pupu";
-    printf ("%d\n", my_strlen (str1));
-    printf ("%d\n", my_strlen (str2));
-    */
-    //char dest[20] = "pururi";
-    //printf ("%s\n", my_strcat (dest, "foo"));
-
-    //int a = printf ("%c", '\0');
-    //printf ("%d", a);
-
-    //my_puts ("dfosi");
-    //my_puts ("0");
-    //my_puts (" ");
-
-    //printf ("%s", my_strncpy (dest, "fjdpofsdjksfoopa", 5));
-
-    //printf ("%s", my_strncat (dest, "fsjjiousfsjs", 4));
-    //char str[20] = {0};
-
-    //printf ("%s", fgets (str, 20, stdin));
-    //printf ("%s", str);
-
-    //printf ("%s", my_strdup (str));
-    char line[100] = {0};
-    printf ("%d", my_getline(line, 100, stdin));
-    printf ("%s", line);
-    //printf ("d%\n%s", getline(line, 100), line);
-
-    return 0;
-}
-
-
 int my_strlen (const char *str)
 {
     assert (str);
@@ -192,17 +155,19 @@ char *my_fgets (char *str, int maxch, FILE *file)
     int ch = 0;
     int len = 0;
 
-    while ((ch = fgetc (file) != '\n' || ch != EOF) && len++ < maxch)
+    while ((ch = fgetc(file)) != '\n' && ch != EOF && len < maxch)
     {
-        *str++ = ch;
+        *(str+len) = ch;
+        len++;
     }
 
-    *str++ = '\n';
-    *str   = '\0';
+    *(str+len) = '\n';
+    len++;
+    *(str+len) = '\0';
 
     if (len > 0)
     {
-        return str-len;
+        return str;
     }
 
     return nullptr;
@@ -225,9 +190,11 @@ char *my_strdup (const char *src)
 
 int my_getline (char *line, int max, FILE *file)//size_t
 {
-    if (my_fgets (line, max, file) != nullptr)
+    assert(line);
+    assert(file);
+
+    if (my_fgets (line, max, file))
     {
-        printf("%s", line);
         return my_strlen(line);
     }
     else

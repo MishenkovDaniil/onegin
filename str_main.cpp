@@ -40,12 +40,12 @@ int main ()
 
     read_by_str (pstr, strings);
 
-    qsort (strings, nlines, sizeof (strings[0]), &compare_str);
+    qsort ((void **)strings, nlines, sizeof (strings[0]), &compare_str);
 
-    for (int i = 0; i < nlines; i++)
+    /*for (int i = 0; i < nlines; i++)
     {
         printf ("%s\n", strings[i]);
-    }
+    }*/
 
     FILE *dst_file = fopen ("new onegin.txt", "w");
 
@@ -140,10 +140,10 @@ int compare_str (const void *str1, const void *str2)
         arr2++;
     }
 
-    while ((*arr1++ == *arr2++) && (*arr1 != '\0') && (*arr2 != '\0'));
+    while ((*arr1++ == *arr2++) && (*arr1 != '\0') && (*arr2 != '\0'));//
         ;
 
-    return *arr1 - *arr2;
+    return *--arr1 - *--arr2;
 }
 
 void print_lex_sort (char **strings, const int nlines, FILE *file)

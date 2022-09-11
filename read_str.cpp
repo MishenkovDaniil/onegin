@@ -43,6 +43,10 @@ int read_by_str (char *pstr, char **strings)
     {
         for (actual_symbol = start; pstr[actual_symbol] != '\n'; actual_symbol++)
         {
+            if (pstr[actual_symbol] == '¸')
+            {
+                pstr[actual_symbol] = 'å';
+            }
             if (pstr[actual_symbol] == '\0')
             {
                 strings[line] = &pstr[start];

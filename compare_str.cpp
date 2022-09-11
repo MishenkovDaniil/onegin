@@ -11,19 +11,37 @@ int compare_str (const void *str1, const void *str2)
     assert (arr1);
     assert (arr2);
 
-    while ((!(isalnum (*arr1))) && (*arr1 != '\0'))//
+    int i, j;
+    i = j = 0;
+
+    while ((*(arr1 + i) != '\0') && (*(arr2 + j) != '\0'))
     {
-        arr1++;
-    }
-    while ((!(isalnum (*arr2))) && (*arr2 != '\0'))//
-    {
-        arr2++;
+        if ((isalnum (*(arr1 + i))) && (isalnum (*(arr2 + j))))
+        {
+            if ((*(arr1 + i)) == (*(arr2 + j)))
+            {
+                i++;
+                j++;
+            }
+            else
+            {
+               return *(arr1 + i) - *(arr2 + j);
+            }
+        }
+        else
+        {
+            if (!(isalnum (*(arr1 + i))))
+            {
+                i++;
+            }
+            if (!(isalnum (*(arr2 + j))))
+            {
+                j++;
+            }
+        }
     }
 
-    while ((*arr1++ == *arr2++) && (*arr1 != '\0') && (*arr2 != '\0'));//
-        ;
-
-    return *--arr1 - *--arr2;
+    return *(arr1 + i) - *(arr2 + j);
 }
 
 int compare_str_backwards (const void *str1, const void *str2)
@@ -37,11 +55,30 @@ int compare_str_backwards (const void *str1, const void *str2)
     assert (arr1);
     assert (arr2);
 
-    int a = strlen (arr1);
-    int b = strlen (arr2);
+    int a = strlen (arr1) - 1;
+    int b = strlen (arr2) - 1;
 
-    while (arr1[--a] == arr2[--b])
-        ;
+    while (a > 0 && b > 0)
+    {
+        while (!(isalnum (arr1[a])) && a > 0)
+        {
+            a--;
+        }
+        while (!(isalnum (arr2[b])) && b > 0)
+        {
+            b--;
+        }
+
+        if (arr1[a] == arr2[b] && a > 0 && b > 0)
+        {
+            a--;
+            b--;
+        }
+        else
+        {
+            return arr1[a] - arr2[b];
+        }
+    }
 
     return arr1[a] - arr2[b];
 }

@@ -1,12 +1,13 @@
 #include "compare_str.h"
-
+#include <stdio.h>
+#include "consts.h"
 int compare_str (const void *str1, const void *str2)
 {
     assert (str1);
     assert (str2);
 
-    const char *arr1 = *(const char **) str1;
-    const char *arr2 = *(const char **) str2;
+    const char *arr1 = ((struct Strings *)str1)->p;
+    const char *arr2 = ((struct Strings *)str2)->p;
 
     assert (arr1);
     assert (arr2);
@@ -49,34 +50,37 @@ int compare_str_backwards (const void *str1, const void *str2)
     assert (str1);
     assert (str2);
 
-    const char *arr1 = *(const char **) str1;
-    const char *arr2 = *(const char **) str2;
+    const char *arr1 = ((struct Strings *)str1)->p;
+    const char *arr2 = ((struct Strings *)str2)->p;
 
     assert (arr1);
     assert (arr2);
 
-    int a = strlen (arr1) - 1;
-    int b = strlen (arr2) - 1;
+    int a = ((struct Strings *)str1)->size;
+    int b = ((struct Strings *)str2)->size;
 
     while (a > 0 && b > 0)
     {
-        while (!(isalnum (arr1[a])) && a > 0)
+        while (!(isalnum (arr1[a])) && arr1[a] != 'ÿ' && a > 0)
         {
             a--;
         }
-        while (!(isalnum (arr2[b])) && b > 0)
+        while (!(isalnum (arr2[b])) && arr2[b] != 'ÿ' && b > 0)
         {
             b--;
         }
 
-        if (arr1[a] == arr2[b] && a > 0 && b > 0)
+        unsigned char ascii_cod1 = arr1[a];
+        unsigned char ascii_cod2 = arr2[b];
+
+        if (ascii_cod1 == ascii_cod2 && a > 0 && b > 0)
         {
             a--;
             b--;
         }
         else
         {
-            return arr1[a] - arr2[b];
+            return ascii_cod1 - ascii_cod2;
         }
     }
 

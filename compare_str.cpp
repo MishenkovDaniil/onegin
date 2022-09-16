@@ -1,6 +1,30 @@
 #include "compare_str.h"
 #include <stdio.h>
 #include "consts.h"
+
+int my_shellsort (Strings *strings, int nlines, int (*str_compare) (const void *, const void *))
+{
+    assert (strings);
+    assert (str_compare);
+
+    Strings temp = {};
+
+    for (int gap = nlines/2; gap > 0; gap /= 2)
+    {
+        for (int i = gap; i < nlines; i++)
+        {
+            for (int j = i - gap; j >= 0 && str_compare ((const void *)(strings + j),(const void *) (strings + (j + gap))) > 0; j -= gap)
+            {
+                temp = strings[j];
+                strings[j] = strings[j + gap];
+                strings[j + gap] = temp;
+            }
+        }
+    }
+
+    return 0;
+}
+
 int compare_str (const void *str1, const void *str2)
 {
     assert (str1);

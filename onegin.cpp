@@ -21,7 +21,7 @@ int main ()
     }
     else
     {
-    FILE *src_file = fopen (ONEGIN, "r");
+    FILE *src_file = fopen (ONEGIN, "rb");
     assert(src_file);
 
     int nlines = 0;
@@ -35,7 +35,9 @@ int main ()
     //read_by_str (pstr, strings);
     read_by_struct (pstr, strings);
     //qsort (strings, nlines, sizeof (strings[0]), &compare_str);
-    qsort (strings, nlines, sizeof (strings[0]), &compare_str);
+    /////qsort (strings, nlines, sizeof (strings[0]), &compare_str);
+
+    my_shellsort (strings, nlines, &compare_str);
 
     FILE *dst_file_1 = fopen (DST, "w");
     fclose (dst_file_1);

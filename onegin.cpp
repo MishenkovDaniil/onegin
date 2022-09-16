@@ -31,27 +31,22 @@ int main ()
     read_file (src_file, pstr, &nlines, &maxlen);
 
     Strings *strings = (struct Strings *)malloc (sizeof(struct Strings) * nlines);
-    //char *strings[nlines];
-    //read_by_str (pstr, strings);
     read_by_struct (pstr, strings);
-    //qsort (strings, nlines, sizeof (strings[0]), &compare_str);
-    /////qsort (strings, nlines, sizeof (strings[0]), &compare_str);
 
     my_shellsort (strings, nlines, &compare_str);
+    /////qsort (strings, nlines, sizeof (strings[0]), &compare_str);
 
     FILE *dst_file_1 = fopen (DST, "w");
     fclose (dst_file_1);
 
     FILE *dst_file_2 = fopen (DST, "a");
-    //print_lex_sort (strings, nlines, dst_file_2);
 
     print_lex_sort (strings, nlines, dst_file_2);
-
-    //qsort (strings, nlines, sizeof (strings[0]), &compare_str_backwards);
-    //print_lex_sort (strings, nlines, dst_file_2);
 
     qsort (strings, nlines, sizeof (strings[0]), &compare_str_backwards);
     print_lex_sort (strings, nlines, dst_file_2);
+
+    print_original (strings, nlines, dst_file_2);
 
     free (pstr);
     }

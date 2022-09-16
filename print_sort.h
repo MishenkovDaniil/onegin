@@ -6,6 +6,7 @@
 
 #include "consts.h"
 
-void print_lex_sort (Strings strings[], const int nlines, FILE *file);
+void print_lex_sort (Strings *strings, const int nlines, FILE *file);
+void print_original (Strings *strings, int nlines, FILE *file);
 
 #endif /* PRINT_SORT_H */

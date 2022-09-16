@@ -53,7 +53,7 @@ int read_by_struct (char *pstr, Strings *strings)
             if (pstr[actual_symbol] == '\0')
             {
                 strings[line].p = &pstr[start];
-                strings[line].number = ++str_number;
+                strings[line].number = str_number++;
                 strings[line].size = &pstr[actual_symbol] - &pstr[start];
 
                 return 0;
@@ -62,7 +62,7 @@ int read_by_struct (char *pstr, Strings *strings)
         pstr[actual_symbol] = '\0';
 
         strings[line].p = &pstr[start];
-        strings[line].number = ++str_number;
+        strings[line].number = str_number++;
         strings[line].size = &pstr[actual_symbol] - &pstr[start];
 
         line++;

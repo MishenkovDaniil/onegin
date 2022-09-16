@@ -6,8 +6,8 @@ const char DST[]    = "new onegin.txt";
 
 struct Strings
 {
-    int number = 0;
     char *p = nullptr;
+    int number = 0;
     int size   = 0;
 };
 

@@ -8,7 +8,7 @@ void print_lex_sort (Strings *strings, const int nlines, FILE *file)
 
     for (int i = 0; i < nlines; i++)
     {
-        fputs (strings[i].p, file);
+        fputs (strings[i].string, file);
     }
 }
 
@@ -23,7 +23,7 @@ void print_original (Strings *strings, int nlines, FILE *file)
         {
             if (strings[j].number == i)
             {
-                fputs (strings[j].p, file);
+                fputs (strings[j].string, file);
             }
         }
     }

@@ -4,9 +4,11 @@
 const char ONEGIN[] = "Eugine Onegin.txt";
 const char DST[]    = "new onegin.txt";
 
+typedef int str_compare_t (const void *str1, const void *str2);
+
 struct Strings
 {
-    char *p = nullptr;
+    char *string = nullptr;
     int number = 0;
     int size   = 0;
 };

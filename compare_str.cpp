@@ -1,8 +1,19 @@
 #include "compare_str.h"
 #include <stdio.h>
+
 #include "consts.h"
 
-int my_shellsort (Strings *strings, int nlines, int (*str_compare) (const void *, const void *))
+unsigned char skip_extra_symbols (const char *arr, int *index, const int step)
+{
+    unsigned char symbol = 0;
+
+    for (symbol = arr[(*index)]; !(isalnum (symbol)) && (*index) > 0; symbol = arr[(*index) += step])
+        ;
+
+    return symbol;
+}
+
+int my_shellsort (Strings *strings, int nlines, str_compare_t *str_compare)
 {
     assert (strings);
     assert (str_compare);
@@ -25,7 +36,7 @@ int my_shellsort (Strings *strings, int nlines, int (*str_compare) (const void *
     return 0;
 }
 
-int compare_str (const void *str1, const void *str2)
+/*int compare_str (const void *str1, const void *str2)
 {
     assert (str1);
     assert (str2);
@@ -36,37 +47,37 @@ int compare_str (const void *str1, const void *str2)
     assert (arr1);
     assert (arr2);
 
-    int i, j;
-    i = j = 0;
+    int arr1_index = 0;
+    int arr2_index = 0;
 
-    while ((*(arr1 + i) != '\0') && (*(arr2 + j) != '\0'))
+    while ((*(arr1 + arr1_index) != '\0') && (*(arr2 + arr2_index) != '\0'))
     {
-        if ((isalnum (*(arr1 + i))) && (isalnum (*(arr2 + j))))
+        if ((isalnum (*(arr1 + arr1_index))) && (isalnum (*(arr2 + arr2_index))))
         {
-            if ((*(arr1 + i)) == (*(arr2 + j)))
+            if ((*(arr1 + arr1_index)) == (*(arr2 + arr2_index)))
             {
-                i++;
-                j++;
+                arr1_index++;
+                arr2_index++;
             }
             else
             {
-               return *(arr1 + i) - *(arr2 + j);
+               return *(arr1 + arr1_index) - *(arr2 + arr2_index);
             }
         }
         else
         {
-            if (!(isalnum (*(arr1 + i))))
+            if (!(isalnum (*(arr1 + arr1_index))))
             {
-                i++;
+                arr1_index++;
             }
-            if (!(isalnum (*(arr2 + j))))
+            if (!(isalnum (*(arr2 + arr2_index))))
             {
-                j++;
+                arr2_index++;
             }
         }
     }
 
-    return *(arr1 + i) - *(arr2 + j);
+    return *(arr1 + arr1_index) - *(arr2 + arr2_index);
 }
 
 int compare_str_backwards (const void *str1, const void *str2)
@@ -80,33 +91,91 @@ int compare_str_backwards (const void *str1, const void *str2)
     assert (arr1);
     assert (arr2);
 
-    int a = ((struct Strings *)str1)->size;
-    int b = ((struct Strings *)str2)->size;
+    int arr1_index = ((struct Strings *)str1)->size;
+    int arr2_index = ((struct Strings *)str2)->size;
+    //printf ("%d\t", arr1_index);
+    //printf ("%d\n", arr2_index);
+    int step = -1;
 
-    while (a > 0 && b > 0)
+    while (arr1_index > 0 && arr2_index > 0)
     {
-        while (!(isalnum (arr1[a])) && arr1[a] != 'ÿ' && a > 0)
-        {
-            a--;
-        }
-        while (!(isalnum (arr2[b])) && arr2[b] != 'ÿ' && b > 0)
-        {
-            b--;
-        }
+        unsigned char alnum1 = skip_extra_symbols (arr1, &arr1_index, step);
+        unsigned char alnum2 = skip_extra_symbols (arr2, &arr2_index, step);
 
-        unsigned char ascii_cod1 = arr1[a];
-        unsigned char ascii_cod2 = arr2[b];
-
-        if (ascii_cod1 == ascii_cod2 && a > 0 && b > 0)
+        if (alnum1 == alnum2 && arr1_index > 0 && arr2_index > 0)
         {
-            a--;
-            b--;
+            arr1_index--;
+            arr2_index--;
         }
         else
         {
-            return ascii_cod1 - ascii_cod2;
+            return alnum1 - alnum2;
         }
     }
 
-    return arr1[a] - arr2[b];
+    return arr1[arr1_index] - arr2[arr2_index];
+}*/
+
+int compare_str (const void *str1, const void *str2)
+{
+    assert (str1);
+    assert (str2);
+
+    const char *arr1 = ((struct Strings *)str1)->string;
+    const char *arr2 = ((struct Strings *)str2)->string;
+
+    assert (arr1);
+    assert (arr2);
+
+    int len1 = ((struct Strings *)str1)->size;
+    int len2 = ((struct Strings *)str2)->size;
+
+    int step = 1;
+
+    return uni_compare(arr1, len1, arr2, len2, step);
 }
+
+int compare_str_backwards (const void *str1, const void *str2)
+{
+    assert (str1);
+    assert (str2);
+
+    const char *arr1 = ((struct Strings *)str1)->string;
+    const char *arr2 = ((struct Strings *)str2)->string;
+
+    assert (arr1);
+    assert (arr2);
+
+    int len1 = ((struct Strings *)str1)->size;
+    int len2 = ((struct Strings *)str2)->size;
+
+    int step = -1;
+
+    return uni_compare(arr1+len1, len1, arr2+len2, len2, step);
+}
+
+int uni_compare (const char *arr1, int strlen_1, const char *arr2, int strlen_2, const int step)
+{
+    int arr1_index = 0;
+    int arr2_index = 0;
+
+    while (arr1_index < strlen_1 && arr2_index < strlen_2)
+        {
+        unsigned char alnum1 = skip_extra_symbols (arr1, &arr1_index, step);
+        unsigned char alnum2 = skip_extra_symbols (arr2, &arr2_index, step);
+
+
+        if (alnum1 == alnum2)
+        {
+            arr1_index += step;
+            arr2_index += step;
+        }
+        else
+        {
+            return alnum1 - alnum2;
+        }
+    }
+
+    return arr1[arr1_index] - arr2[arr2_index];
+}
+

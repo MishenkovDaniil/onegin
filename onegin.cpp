@@ -9,38 +9,37 @@
 #include "print_sort.h"
 #include "consts.h"
 
-struct stat buf = {};
-
 int main ()
 {
     setlocale (LC_ALL, "Rus");
+    setlocale (LC_NUMERIC, "Eng");
 
-    if ((stat (ONEGIN, &buf)) == -1)
+    int file_size = onegin_size();
+    if (file_size == -1)
     {
-        printf ("ERROR: stat");
+        return -1;
     }
-    else
-    {
+
     FILE *src_file = fopen (ONEGIN, "rb");
     assert(src_file);
 
+    char *pstr = (char *)calloc (1, sizeof(char)*(file_size + 2));
+    assert (pstr);
+
     int nlines = 0;
-    int maxlen = 0;
+    nlines = read_file (src_file, pstr, &nlines, file_size);
 
-    char *pstr = (char *)malloc (1 * buf.st_size);
-    read_file (src_file, pstr, &nlines, &maxlen);
+    Strings *strings = (Strings *)calloc (nlines, sizeof (Strings));
+    assert (strings);
 
-    Strings *strings = (struct Strings *)malloc (sizeof(struct Strings) * nlines);
     read_by_struct (pstr, strings);
 
     my_shellsort (strings, nlines, &compare_str);
-    /////qsort (strings, nlines, sizeof (strings[0]), &compare_str);
 
     FILE *dst_file_1 = fopen (DST, "w");
     fclose (dst_file_1);
 
     FILE *dst_file_2 = fopen (DST, "a");
-
     print_lex_sort (strings, nlines, dst_file_2);
 
     qsort (strings, nlines, sizeof (strings[0]), &compare_str_backwards);
@@ -48,8 +47,8 @@ int main ()
 
     print_original (strings, nlines, dst_file_2);
 
+    free (strings);
     free (pstr);
-    }
 
     return 0;
 }

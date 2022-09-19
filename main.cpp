@@ -14,7 +14,6 @@ int main (int argc, const char *argv[])
     setlocale (LC_ALL, "Rus");
     setlocale (LC_NUMERIC, "Eng");
 
-    extern int errno = 0;
     int errnosave = 0;
 
     if (argc == 1)
@@ -35,8 +34,7 @@ int main (int argc, const char *argv[])
     int file_size = get_file_size(argv[1]);
     if (file_size)
     {
-       errorsave = errno;
-       return errnosave;
+       return file_size;
     }
 
     FILE *src_file = fopen (argv[1], "rb");
@@ -50,9 +48,8 @@ int main (int argc, const char *argv[])
     char *text = (char *)calloc (1, sizeof(char)*(file_size + 2));
     if (text == nullptr)
     {
-        errorsave = errno;
-        perror ("error message");
-        return errnosave;
+        fprintf (stderr, "error message: out of memory");
+        return 0;
     }
 
     int nlines = 0;
@@ -61,9 +58,8 @@ int main (int argc, const char *argv[])
     Line *lines = (Line *)calloc (nlines, sizeof (Line));
     if (lines == nullptr)
     {
-        errorsave = errno;
-        perror ("error message");
-        return errnosave;
+        fprintf (stderr, "error message: out of memory");
+        return 0;
     }
 
     /*Text orig = {};
@@ -80,8 +76,6 @@ int main (int argc, const char *argv[])
 
 
     split_text (text, lines);
-
-    //my_shellsort (lines, nlines, &compare_str);
 
     FILE *dst_file = fopen (argv[3], "w");
 

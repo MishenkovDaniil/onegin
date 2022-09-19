@@ -11,12 +11,13 @@ int get_file_size (const char *file_name)
     struct stat buf = {};
 
     stat(file_name, &buf);
+    int errnosave = 0;
 
     if (errno)
     {
+        errnosave = errno;
         perror ("stat() failed");
-        fprintf (stderr, "%d", errno);
-        return errno;
+        return errnosave;
     }
 
     return buf.st_size;

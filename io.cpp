@@ -23,16 +23,19 @@ int get_file_size (const char *file_name)
     return buf.st_size;
 }
 
-// Создает buf
 int read_in_buf (FILE *src_file, char *text, int *nlines, int file_size)
 {
     assert (src_file);
     assert (text);
     assert (nlines);
 
+    int n_symbols = fread (text, sizeof (char), file_size, src_file);
+    if (n_symbols < file_size)
+    {
+        fprintf (stderr, "error message: reading of source file failed");
 
-    // error??? errno
-    fread (text, sizeof (char), file_size, src_file);
+        return 0;
+    }
 
     text[file_size] = '\n';
     text[file_size + 1] = '\0';

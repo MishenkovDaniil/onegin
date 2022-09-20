@@ -32,7 +32,7 @@ int main (int argc, const char *argv[])
     }
 
     int file_size = get_file_size(argv[1]);
-    if (file_size)
+    if (!file_size)
     {
        return file_size;
     }
@@ -40,7 +40,7 @@ int main (int argc, const char *argv[])
     FILE *src_file = fopen (argv[1], "rb");
     if (src_file == nullptr)
     {
-        errorsave = errno;
+        errnosave = errno;
         perror ("opening of file failed");
         return errnosave;
     }
@@ -54,6 +54,10 @@ int main (int argc, const char *argv[])
 
     int nlines = 0;
     nlines = read_in_buf (src_file, text, &nlines, file_size);
+    if (!nlines)
+    {
+        return 0;
+    }
 
     Line *lines = (Line *)calloc (nlines, sizeof (Line));
     if (lines == nullptr)
@@ -61,19 +65,6 @@ int main (int argc, const char *argv[])
         fprintf (stderr, "error message: out of memory");
         return 0;
     }
-
-    /*Text orig = {};
-    split_text(&orig, buf);
-
-    Text sorted = {};
-    split_text()
-
-    sort(sorted)
-
-    print_text();
-
-*/
-
 
     split_text (text, lines);
 
@@ -85,7 +76,7 @@ int main (int argc, const char *argv[])
     }
     if (strcmp (argv[2], "ordinary") == 0)
     {
-        my_shellsort (lines, nlines, sizeof (lines[0]), &compare_str);
+        my_shellsort (lines, nlines, sizeof(lines[0]), &compare_str);
         print_lines (lines, nlines, dst_file);
     }
     if (strcmp (argv[2], "backwards") == 0)
@@ -95,7 +86,6 @@ int main (int argc, const char *argv[])
     }
 
     free (lines);
-    // free_text() αστεπ
     free (text);
 
     return 0;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "text.h"
 #include "sort.h"
@@ -22,15 +23,6 @@ unsigned char *skip_extra_symbols (const char *arr, int *index, const int step, 
     return symbol;
 }
 
-// Открой прототип qsort
-// Сделай такой же
-// Моджешь написать свой swap:
-// Сначала, чтобы работало
-// Потом:
-// 1. Меняешь по 8 байт
-// 2. Меняешь по 4 байт
-// 3. Меняешь по 2 байт
-// 4. Меняешь по 1 байт
 /*
 void my_shellsort (Line *lines, int nlines, comparer_t *str_compare)
 {
@@ -62,16 +54,24 @@ void my_shellsort (void *ptr, size_t count, size_t size, comparer_t *str_compare
     {
         for (int i = gap; i < count; i++)
         {
-            for (int j = i - gap; j >= 0 && str_compare ((const void *)(ptr + j),(const void *) (ptr + (j + gap))) > 0; j -= gap)
+            for (int j = i - gap; j >= 0 && str_compare ((const void *)(ptr + size*j),(const void *) (ptr + size*(j + gap))) > 0; j -= gap)
             {
-                swap (ptr + j, ptr + j + gap);
+                void *ptr1 = ptr + size*j;
+                void *ptr2 = ptr + size*(j + gap);
+
+                swap (ptr1, ptr2, size);
             }
         }
     }
 }
-void swap (void *ptr1, void *ptr2)
+void swap (void *ptr1, void *ptr2, size_t size)
 {
-    void *temp = ptr1;
-    ptr1 = ptr2;
-    ptr2 = temp;
+    void *temp = calloc (1, size);
+
+    memcpy (temp, ptr1, size);
+    memcpy (ptr1, ptr2, size);
+    memcpy (ptr2, temp, size);
+
+    free (temp);
 }
+

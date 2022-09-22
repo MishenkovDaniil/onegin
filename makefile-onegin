@@ -18,3 +18,4 @@ sort.o: sort.cpp
 
 io.o: io.cpp
 	$(CC) $(FLAGS) io.cpp
+

@@ -15,3 +15,4 @@ int split_text (char *text, Line *lines);
 void print_lines (Line *lines, const int nlines, FILE *file);
 
 #endif /* IO_H */
+

@@ -118,22 +118,3 @@ void print_lines (Line *lines, const int nlines, FILE *file)
         fputs (lines[i].start, file);
     }
 }
-
-/*
-void print_original (Line *lines, int nlines, FILE *file)
-{
-    assert (lines);
-    assert (file);
-
-    for (int i = 0; i < nlines; i++)
-    {
-        for (int j = 0; j < nlines; j++)
-        {
-            if (lines[j].number == i)
-            {
-                fputs (lines[j].string, file);
-            }
-        }
-    }
-}
-*/

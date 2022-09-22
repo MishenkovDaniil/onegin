@@ -24,28 +24,6 @@ unsigned char *skip_extra_symbols (const char *arr, int *index, const int step, 
     return symbol;
 }
 
-/*
-void my_shellsort (Line *lines, int nlines, comparer_t *str_compare)
-{
-    assert (lines);
-    assert (str_compare);
-
-    Line temp = {};
-
-    for (int gap = nlines/2; gap > 0; gap /= 2)
-    {
-        for (int i = gap; i < nlines; i++)
-        {
-            for (int j = i - gap; j >= 0 && str_compare ((const void *)(lines + j),(const void *) (lines + (j + gap))) > 0; j -= gap)
-            {
-                temp = lines[j];
-                lines[j] = lines[j + gap];
-                lines[j + gap] = temp;
-            }
-        }
-    }
-}*/
-
 void my_shellsort (void *ptr, size_t count, size_t size, comparer_t *str_compare)
 {
     assert (ptr);

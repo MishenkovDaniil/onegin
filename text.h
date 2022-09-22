@@ -16,12 +16,6 @@ struct Line
     int len = 0;
 };
 
-/*struct Text
-{
-    Line *lines = {};
-    size_t n_lines = 0;
-};*/
-
 int compare_str (const void *str1, const void *str2);
 int compare_str_backwards (const void *str1, const void *str2);
 int universal_compare (const char *arr1, int strlen_1, const char *arr2, int strlen_2, const int step);

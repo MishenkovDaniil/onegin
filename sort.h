@@ -12,4 +12,3 @@ void my_shellsort (void *ptr, size_t count, size_t size, comparer_t *str_compare
 void swap (void *ptr1, void *ptr2, size_t size);
 
 #endif /* SORT_H */
-//

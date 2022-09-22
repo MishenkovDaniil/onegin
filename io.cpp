@@ -107,7 +107,6 @@ int split_text (char *text, Line *lines)
     return 0;
 }
 
-
 void print_lines (Line *lines, const int nlines, FILE *file)
 {
     assert (lines);

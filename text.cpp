@@ -66,4 +66,4 @@ int universal_compare (const char *arr1, int strlen_1, const char *arr2, int str
     }
 
     return *(arr1 + arr1_index - arr2_index);
-}//
+}

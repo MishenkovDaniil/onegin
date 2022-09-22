@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "text.h"
 #include "sort.h"
@@ -64,14 +65,46 @@ void my_shellsort (void *ptr, size_t count, size_t size, comparer_t *str_compare
         }
     }
 }
+
 void swap (void *ptr1, void *ptr2, size_t size)
 {
-    void *temp = calloc (1, size);
+    assert (ptr1);
+    assert (ptr2);
 
-    memcpy (temp, ptr1, size);
-    memcpy (ptr1, ptr2, size);
-    memcpy (ptr2, temp, size);
+    size_t index_8 = 0;
+    for (; index_8 < size / 8; index_8++)
+    {
+        long long temp = ((long long *)ptr1)[index_8];
 
-    free (temp);
+        ((long long *)ptr1)[index_8] = ((long long *)ptr2)[index_8];
+        ((long long *)ptr2)[index_8] = temp;
+    }
+
+    size_t index_4 = index_8 * 2;
+    for (; index_4 < size / 4; index_4++)
+    {
+        long temp = ((long *)ptr1)[index_4];
+
+        ((long *)ptr1)[index_4] = ((long *)ptr2)[index_4];
+        ((long *)ptr2)[index_4] = temp;
+    }
+
+    size_t index_2 = index_4 * 2;
+    for (; index_2 < size / 2; index_2++)
+    {
+        short temp = ((short *)ptr1)[index_2];
+
+        ((short *)ptr1)[index_2] = ((short *)ptr2)[index_2];
+        ((short *)ptr2)[index_2] = temp;
+    }
+
+    size_t index_1 = index_2 * 2;
+    for (; index_1 < size; index_1++)
+    {
+        char temp = ((char *)ptr1)[index_1];
+
+        ((char *)ptr1)[index_1] = ((char *)ptr2)[index_1];
+        ((char *)ptr2)[index_1] = temp;
+    }
 }
 

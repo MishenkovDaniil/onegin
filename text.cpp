@@ -41,8 +41,6 @@ int compare_str_backwards (const void *str1, const void *str2)
     return universal_compare(arr1 + len1, len1, arr2 + len2, len2, step);
 }
 
-// Можно намного меньше
-
 int universal_compare (const char *arr1, int strlen_1, const char *arr2, int strlen_2, const int step)
 {
     assert (arr1);

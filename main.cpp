@@ -85,6 +85,19 @@ int main (int argc, const char *argv[])
         print_lines (lines, nlines, dst_file);
     }
 
+    if (fclose (src_file))
+    {
+        fprintf (stderr, "error message: cannot close source file");
+
+        return 0;
+    }
+    if (fclose (dst_file))
+    {
+        fprintf (stderr, "error message: cannot close dest file");
+
+        return 0;
+    }
+
     free (lines);
     free (text);
 

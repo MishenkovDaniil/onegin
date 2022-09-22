@@ -6,6 +6,31 @@
 #include "io.h"
 #include "text.h"
 
+int count_symbols (const char *buf, size_t size, const char ch)
+{
+    int counter = 0;
+    for (int i = 0; i <= size; i++)
+    {
+        if (buf[i] == ch)
+        {
+            counter++;
+        }
+    }
+
+    return counter;
+}
+
+void normalise_text (char *buf, const char ch_1, const char ch_2)
+{
+    for (int i = 0; buf[i] != '\0'; i++)
+    {
+        if (buf[i] == ch_1)
+        {
+            buf[i] = ch_2;
+        }
+    }
+}
+
 int get_file_size (const char *file_name)
 {
     struct stat buf = {};
@@ -29,30 +54,27 @@ int read_in_buf (FILE *src_file, char *text, int *nlines, int file_size)
     assert (text);
     assert (nlines);
 
+    //char *buf = nullptr;
+    //setvbuf (src_file, buf, _IOFBF, file_size);
+
     int n_symbols = fread (text, sizeof (char), file_size, src_file);
     if (n_symbols < file_size)
     {
-        fprintf (stderr, "error message: reading of source file failed");
+        fprintf (stderr, "error message: reading of source file failed (%d out of %d)", n_symbols, file_size);
 
         return 0;
     }
 
+    //setvbuf (src_file, buf, _IONBF, 0);
+
     text[file_size] = '\n';
     text[file_size + 1] = '\0';
 
-    for (int i = 0; i <= file_size; i++)
-    {
-        if (text[i] == '\n')
-        {
-            (*nlines)++;
-        }
-    }
+    *nlines = count_symbols (text, file_size, '\n');
 
     return *nlines;
 }
 
-// split text array of lines
-// split_text(Text text, buf)
 int split_text (char *text, Line *lines)
 {
     assert (text);
@@ -60,27 +82,21 @@ int split_text (char *text, Line *lines)
 
     int line = 0;
     int start = 0;
-    int str_number = 0;
     int actual_symbol = 0;
 
-// calloc lines
+    normalise_text (text, '¸', 'å');
+
     while (text[start] != '\0')
     {
         for (actual_symbol = start; text[actual_symbol] != '\0'; actual_symbol++)
         {
-            if (text[actual_symbol] == '¸')
-            {
-                text[actual_symbol] = 'å';
-            }
-
             if (text[actual_symbol] == '\n')
             {
                 text[actual_symbol] = '\0';
 
                 lines[line].start = &text[start];
-                //lines[line].number = str_number++;
                 lines[line].len = &text[actual_symbol] - &text[start];
-                //printf ("%s\n", strings[line].string);
+
                 line++;
 
                 start = ++actual_symbol;
@@ -91,8 +107,6 @@ int split_text (char *text, Line *lines)
     return 0;
 }
 
-//void print_text(const Text *text)
-//{}
 
 void print_lines (Line *lines, const int nlines, FILE *file)
 {

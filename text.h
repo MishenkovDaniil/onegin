@@ -19,7 +19,6 @@ struct Line
 /*struct Text
 {
     Line *lines = {};
-    // size_t !
     size_t n_lines = 0;
 };*/
 

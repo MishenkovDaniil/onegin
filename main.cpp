@@ -9,6 +9,8 @@
 #include "sort.h"
 #include "io.h"
 
+int VERBOSE = 0;
+
 int main (int argc, const char *argv[])
 {
     setlocale (LC_ALL, "Rus");
@@ -18,18 +20,27 @@ int main (int argc, const char *argv[])
 
     if (argc == 1)
     {
-        printf ("enter source_file, sort type and dest_file through a space\n"
-                "\t sort types:\n"
+        printf ("enter source_file, sort type, dest_file and verbose through a space\n"
+                "sort types:\n"
                 "\t no sort        - no\n"
                 "\t ordinary cort  - ordinary\n"
-                "\t backwards sort - backwards");
+                "\t backwards sort - backwards\n"
+                "verbose values:\n"
+                "\t 0 - to see info about all errors\n"
+                "\t 1 - to see only necessary errors");
         return 0;
     }
-    else if (argc != 4)
+    else if (argc != 5)
     {
-        printf ("not readable: enter source_file sort type and dest_file");
+        printf ("not readable: enter source_file sort type, dest_file and verbose");
         return 0;
     }
+    else if (*(argv[4]) < '0' || *(argv[4]) > '1')
+    {
+        printf ("verbose must be a number from 0 to 1");
+    }
+
+    VERBOSE = *(argv[4]) - '0';
 
     int file_size = get_file_size(argv[1]);
     if (!file_size)
@@ -42,6 +53,7 @@ int main (int argc, const char *argv[])
     {
         errnosave = errno;
         perror ("opening of file failed");
+
         return errnosave;
     }
 
@@ -87,16 +99,23 @@ int main (int argc, const char *argv[])
 
     if (fclose (src_file))
     {
-        fprintf (stderr, "error message: cannot close source file");
+        if (!VERBOSE)
+        {
+            fprintf (stderr, "error message: cannot close source file");
 
-        return 0;
+            return 0;
+        }
     }
     if (fclose (dst_file))
     {
-        fprintf (stderr, "error message: cannot close dest file");
+        if (!VERBOSE)
+        {
+            fprintf (stderr, "error message: cannot close dest file");
 
-        return 0;
+            return 0;
+        }
     }
+
 
     free (lines);
     free (text);

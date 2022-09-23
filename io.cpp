@@ -6,10 +6,12 @@
 #include "io.h"
 #include "text.h"
 
+extern int VERBOSE;
+
 int count_symbols (const char *buf, size_t size, const char ch)
 {
     int counter = 0;
-    for (int i = 0; i <= size; i++)
+    for (size_t i = 0; i <= size; i++)
     {
         if (buf[i] == ch)
         {
@@ -42,6 +44,7 @@ int get_file_size (const char *file_name)
     {
         errnosave = errno;
         perror ("stat() failed");
+
         return errnosave;
     }
 
@@ -58,11 +61,15 @@ int read_in_buf (FILE *src_file, char *text, int *nlines, int file_size)
     //setvbuf (src_file, buf, _IOFBF, file_size);
 
     int n_symbols = fread (text, sizeof (char), file_size, src_file);
-    if (n_symbols < file_size)
-    {
-        fprintf (stderr, "error message: reading of source file failed (%d out of %d)", n_symbols, file_size);
 
-        return 0;
+    if (!VERBOSE)
+    {
+        if (n_symbols < file_size)
+        {
+            fprintf (stderr, "error message: reading of source file failed (%d out of %d)", n_symbols, file_size);
+
+            return 0;
+        }
     }
 
     //setvbuf (src_file, buf, _IONBF, 0);
@@ -117,4 +124,3 @@ void print_lines (Line *lines, const int nlines, FILE *file)
         fputs (lines[i].start, file);
     }
 }
-

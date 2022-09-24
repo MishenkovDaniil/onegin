@@ -3,19 +3,18 @@ FLAGS = -c -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-e
 
 
 
-all: main.o text.o sort.o io.o
-	g++ main.o sort.o io.o text.o
+all: main.o text/text.o sort/sort.o io/io.o
+	g++ main.o sort/sort.o io/io.o text/text.o
 	a.exe
 
 main.o: main.cpp
 	$(CC) $(FLAGS) main.cpp
 
-text.o: text.cpp
-	$(CC) $(FLAGS) text.cpp
+text/text.o: text/text.cpp
+	$(CC) $(FLAGS) text/text.cpp
 
-sort.o: sort.cpp
-	$(CC) $(FLAGS) sort.cpp
+sort/sort.o: sort/sort.cpp
+	$(CC) $(FLAGS) sort/sort.cpp
 
-io.o: io.cpp
-	$(CC) $(FLAGS) io.cpp
-
+io/io.o: io/io.cpp
+	$(CC) $(FLAGS) io/io.cpp
